@@ -1,0 +1,38 @@
+{%extends 'main/base.html'%}
+{%block title%}
+{{ title }}
+{%endblock %}
+
+{%block content%}
+<h1>Главная страница</h1>
+
+
+   {% if user.is_authenticated %}
+     <li>User: {{ user.get_username }}</li>
+     <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+     <li><a href="{% url 'create'%}?next={{request.path}}">create</a></li>
+
+   {% else %}
+     <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+   {% endif %}
+
+    {%if tasks and user.is_authenticated%}
+    {%for el in tasks%}
+    <div>
+        <h3>
+            {{el.title}}
+            <p>{{el.task}} </p>
+        </h3>
+    </div>
+
+    {% endfor %}
+
+{% else %}
+<p> У нас нет записей </p>
+{% endif %}
+<ul class="menu">
+    <li><a href="http://127.0.0.1:8000/about-us">О нас</li></a>
+     <li><a href="http://127.0.0.1:8000/">главная</li></a>
+
+{% endblock %}
+

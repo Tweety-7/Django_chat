@@ -65,47 +65,47 @@ def signup(request):
     form = UserCreationForm()
     context = {'form': form, 'error': error}
     return render(request, 'main/signup.html', context)
-def login(request):
-    error=''
-    if request.method == 'POST':
-        form = AuthenticationForm(request.POST)
-        print("koKoko")
-        print(form, form)
-        if form.is_valid():
-            print("KEK")
-            # username = request.POST['username']
-            # pas = request.POST['password']
-            # username = form.login
-            # pas = form.password
-            # username = form.cleaned_data.get('username')
-            # pas = form.cleaned_data.get('password')
-            username = request.POST.get('username')
-            pas = request.POST.get('password')
-            print(username, pas)
-            user = authenticate(username=username, password=pas)
-            if user is not None:
-                print("УРАААА")
-                login(request)
-                return  redirect('home')
-            else:
-                pint("LOL!")
-                return redirect('login')
+# def login(request):
+#     error=''
+#     if request.method == 'POST':
+#         form = AuthenticationForm(request.POST)
+#         print("koKoko")
+#         print(form, form)
+#         if form.is_valid():
+#             print("KEK")
+#             # username = request.POST['username']
+#             # pas = request.POST['password']
+#             # username = form.login
+#             # pas = form.password
+#             # username = form.cleaned_data.get('username')
+#             # pas = form.cleaned_data.get('password')
+#             username = request.POST.get('username')
+#             pas = request.POST.get('password')
+#             print(username, pas)
+#             user = authenticate(username=username, password=pas)
+#             if user is not None:
+#                 print("УРАААА")
+#                 login(request)
+#                 return  redirect('home')
+#             else:
+#                 pint("LOL!")
+#                 return redirect('login')
+#
+#                 #{{form.login}}<br>
+#                 #{{forrm.password}}
+#             # form.confirm_login_allowed()
+#             # authenticate(form)
+#         else:
+#             error='Аккаунт не существует'
+#             # return render(request,'main/login.html')
+#     form = AuthenticationForm()
+#     context = {'form': form, 'error': error}
+#     return render(request, 'main/login.html', context)
 
-                #{{form.login}}<br>
-                #{{forrm.password}}
-            # form.confirm_login_allowed()
-            # authenticate(form)
-        else:
-            error='Аккаунт не существует'
-            # return render(request,'main/login.html')
-    form = AuthenticationForm()
-    context = {'form': form, 'error': error}
-    return render(request, 'main/login.html', context)
+from django.contrib.auth import logout as loogout
 
-from django.contrib.auth import logout as loogout_1
-
-def logout(request):
-    logout_1(request)
-
-def logout_then_login(request):
-    pass
+# def logout(request):
+#     logout(request)
+#
+# def logout_then_login(request):
+#     pass

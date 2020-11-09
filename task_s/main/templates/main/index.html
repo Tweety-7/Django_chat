@@ -22,8 +22,10 @@
     {%if tasks and user.is_authenticated%}
     {%for el in tasks%}
     <div>
-        <h3>
+        <>
             {{el.title}}
+            от: {{el.sponsor}}<br>
+            кому: {{el.recipient}}<br>
             <p>{{el.task}} </p>
         </h3>
     </div>

@@ -15,7 +15,7 @@ from django.contrib.auth.hashers import make_password
 def index(request):
         tasks = ''
         if request.user.is_active:
-            tasks = Task.objects.order_by('-id')
+            tasks = Task.objects.order_by('sponsor','recipient')
             tasks = tasks.filter(Q(sponsor = request.user)  | Q(recipient = request.user))
         # tasks = tasks.filter(request.user in [recipient, sponsor])
 
@@ -79,19 +79,9 @@ def login(request):
             user = form.get_user()
             login_l(request, user)
             return redirect('/')
+        else:
+            error = 'Ошибка заполнения формы('
 
-        # print(form.valid)
-        # print(form.valid())
-
-
-        # print('is_valid^!',form.is_valid)
-        # print('is_valid()!',form.is_valid())
-        #
-        # print('1 username', form['username'])
-        #
-        # user = form.get_user()
-        # print('GU()!',user)
-        # print('GU_',form.get_user)
 
         # login_l(request, user)
 
@@ -107,7 +97,7 @@ def login(request):
 
         # else:
         #     print('KEK')
-        #     error = 'Ошибка заполнения формы('
+        #     error = '\nОшибка заполнения формы('
             # return redirect('login')
 
     form = AuthenticationForm()

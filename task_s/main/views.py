@@ -3,34 +3,30 @@ from .models import Task
 from .forms import TaskForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as login_l
 from itertools import chain
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-# Create your views here.
-# from django.contrib.auth import is_authenticated
-# @login_required(login_url='http://127.0.0.1:8000/login')
+from django.contrib.auth.views import LoginView
 from django.db.models import Q
+from django.contrib.auth.hashers import make_password
+
 
 def index(request):
         tasks = ''
-        tasks = Task.objects.order_by('-id')
-
+        if request.user.is_active:
+            tasks = Task.objects.order_by('-id')
+            tasks = tasks.filter(Q(sponsor = request.user)  | Q(recipient = request.user))
         # tasks = tasks.filter(request.user in [recipient, sponsor])
 
-        # task_pl = list(task_rc, task_sp)
-        task_pl = Q(sponsor = request.user)  | Q(recipient = request.user)
-        # tasks = task_pl.order_by('-id')
+
         title = 'Главная страница'
         hrefs = ['logout']
         # title = 'для просмотра, авторизируйтесь'
         # hrefs = ['signup', 'login', 'logout']
         return render(request, 'main/index.html', {'title' : title, 'tasks' : tasks,'hrefs':hrefs})
 
-    # return render(request, 'main/index.html',{
-    #     'title': 'Главная страница сайта'})
-        # 'tasks':tasks})
-# def index(request):
-#     return HttpResponse("<h4>main</h4>")
+
 
 
 def about(request):
@@ -58,54 +54,71 @@ def signup(request):
             username = form.cleaned_data.get('username')
             password_my = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password_my)
-            login(request)
+            print('KOK')
+            print(user)
+            print('KOK')
+            login_l(request, user)
             return redirect('home')
         else:
             error = 'Форма логина заполнена не верно'
     form = UserCreationForm()
     context = {'form': form, 'error': error}
     return render(request, 'main/signup.html', context)
-# def login(request):
-#     error=''
-#     if request.method == 'POST':
-#         form = AuthenticationForm(request.POST)
-#         print("koKoko")
-#         print(form, form)
-#         if form.is_valid():
-#             print("KEK")
-#             # username = request.POST['username']
-#             # pas = request.POST['password']
-#             # username = form.login
-#             # pas = form.password
-#             # username = form.cleaned_data.get('username')
-#             # pas = form.cleaned_data.get('password')
-#             username = request.POST.get('username')
-#             pas = request.POST.get('password')
-#             print(username, pas)
-#             user = authenticate(username=username, password=pas)
-#             if user is not None:
-#                 print("УРАААА")
-#                 login(request)
-#                 return  redirect('home')
-#             else:
-#                 pint("LOL!")
-#                 return redirect('login')
-#
-#                 #{{form.login}}<br>
-#                 #{{forrm.password}}
-#             # form.confirm_login_allowed()
-#             # authenticate(form)
-#         else:
-#             error='Аккаунт не существует'
-#             # return render(request,'main/login.html')
-#     form = AuthenticationForm()
-#     context = {'form': form, 'error': error}
-#     return render(request, 'main/login.html', context)
+def login(request):
+    error=''
+    if request.method == 'POST':
+        form = AuthenticationForm(None, request.POST)
+        # 'AuthenticationForm' object has no attribute 'cleaned_data'
+        # username = form.cleaned_data.get('username')
+        # password_my = form.cleaned_data.get('password')
+        # username = form.cleaned_data['username']
+        # password = form.cleaned_data['password']
+        print('form!!', form)
+        if form.is_valid():
+            print("UUU")
+            user = form.get_user()
+            login_l(request, user)
+            return redirect('/')
 
-from django.contrib.auth import logout as loogout
+        # print(form.valid)
+        # print(form.valid())
 
-# def logout(request):
-#     logout(request)
+
+        # print('is_valid^!',form.is_valid)
+        # print('is_valid()!',form.is_valid())
+        #
+        # print('1 username', form['username'])
+        #
+        # user = form.get_user()
+        # print('GU()!',user)
+        # print('GU_',form.get_user)
+
+        # login_l(request, user)
+
+        # user.authenticate()
+        # user = authenticate(form.get_user())
+        # auth_login(request, form.get_user())
+        # login_l(request, user)
+        # print(user)
+        # if user is not None:
+        #         print('KOK')
+        #         login_l(request, user)
+                # return redirect('home')
+
+        # else:
+        #     print('KEK')
+        #     error = 'Ошибка заполнения формы('
+            # return redirect('login')
+
+    form = AuthenticationForm()
+    context = {'form' : form, 'error' : error}
+    return render(request, 'main/login.html', context)
+
+
+from django.contrib.auth import logout as lout
+def logout(request):
+    lout(request)
+    return  redirect('/')
 #
 # def logout_then_login(request):
 #     pass

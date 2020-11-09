@@ -1,14 +1,13 @@
 {%extends 'main/base.html'%}
 {%block title%}
-Регистрация пользователя
+Log-in
 {%endblock %}
 {%block content%}
-    <h1> Регистрация</h1>
+    <h1> Log-in</h1>
         <form method="post">
             {%csrf_token %}
             {{form}}
-            <button type="submit" class="btn btn-success">Добавить</button>
+            <button type="submit" class="btn btn-success">Log-in</button>
             <span>{{error}}</span>
         </form>
 {%endblock%}
-
